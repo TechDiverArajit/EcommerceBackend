@@ -1,12 +1,17 @@
 package com.springbootprojects.ecommerce.Ecommerce.Backend.Entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 
 @Entity
 public class PaymentEntity extends BaseEntity {
-    @Column(name = "payment_id")
-    private Long id;
+
+
+
+    private String transactionID;
+
+    @ManyToOne
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
 
     private String status;
 

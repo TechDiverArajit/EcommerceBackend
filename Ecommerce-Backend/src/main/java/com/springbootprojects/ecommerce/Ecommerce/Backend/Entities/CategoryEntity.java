@@ -6,8 +6,6 @@ import jakarta.persistence.Entity;
 @Entity
 public class CategoryEntity extends BaseEntity {
 
-    @Column(table = "category_id")
-    private Long id;
     private String categoryName;
 
 }

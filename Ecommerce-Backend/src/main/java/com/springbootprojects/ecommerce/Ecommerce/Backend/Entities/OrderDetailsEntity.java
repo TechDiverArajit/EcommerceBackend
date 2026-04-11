@@ -4,8 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class OrderDetailsEntity extends BaseEntity {
-    @Column(name = "Order_details_id")
-    private Long id;
+
 
     @ManyToOne
     @JoinColumn(name = "order_id")

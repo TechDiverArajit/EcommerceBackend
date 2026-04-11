@@ -6,8 +6,7 @@ import jakarta.persistence.*;
 
 @Entity
 public class CustomerEntity extends BaseEntity {
-    @Column(table = "Customer_id")
-    private Long id;
+
     @Column(nullable = false)
     private String name;
     @Column(nullable = false)
@@ -18,5 +17,9 @@ public class CustomerEntity extends BaseEntity {
     @JoinColumn(name = "order_id")
     @JsonIgnore
     private OrderEntity order;
+
+    @OneToOne(mappedBy = "CustomerID")
+    @JsonIgnore
+    private CartEntity cart;
 
 }

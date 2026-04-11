@@ -6,14 +6,13 @@ import java.util.List;
 
 @Entity
 public class CartItemEntity extends BaseEntity {
-    @Column(table = "CartItem_id")
-    private Long id;
 
-    @OneToOne
+
+    @ManyToOne
     @JoinColumn(name = "cart_id")
     private CartEntity cart;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "product_id")
     private ProductEntity product;
 
