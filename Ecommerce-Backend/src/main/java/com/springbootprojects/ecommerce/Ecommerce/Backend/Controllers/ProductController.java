@@ -1,10 +1,10 @@
 package com.springbootprojects.ecommerce.Ecommerce.Backend.Controllers;
 
-import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.ProductDTO;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request.ProductRequest;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.ProductResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Services.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,16 +15,20 @@ public class ProductController {
 
     private final ProductService productService;
 
+
+
     @GetMapping("/{pId}")
-    public ResponseEntity<ProductDTO> getProductById(@PathVariable Long pId){
+    public ResponseEntity<ProductResponse> getProductById(@PathVariable Long pId){
         return ResponseEntity.ok(productService.getProductById(pId));
     }
 
     @PostMapping
-    public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO){
-        ProductDTO productDTO1 = productService.createProduct(productDTO);
-        return new ResponseEntity<>(productDTO1, HttpStatus.CREATED);
+    public ResponseEntity<ProductResponse> createProduct(@RequestBody ProductRequest productRequest){
+        ProductResponse productResponse = productService.createProduct(productRequest);
+        return new ResponseEntity<>(productResponse, HttpStatus.CREATED);
     }
+
+
 }
 
 
