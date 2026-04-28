@@ -14,7 +14,7 @@ public class AddressEntity extends BaseEntity {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "customer_id" , nullable = false)
-    private CustomerEntity customer;
+    private UserEntity customer;
 
     @Column(nullable = false)
     private String fullName;

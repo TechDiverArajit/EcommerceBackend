@@ -1,14 +1,9 @@
 package com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request;
 
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.AddressEntity;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.CustomerEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
 import lombok.Data;
 
 @Data

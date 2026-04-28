@@ -2,9 +2,12 @@ package com.springbootprojects.ecommerce.Ecommerce.Backend.Configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -17,11 +20,26 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests(
                         authorization ->
                         authorization
-                                .requestMatchers("/products/**").permitAll()
+                                .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
-                .csrf(csrf -> csrf.disable())
-                .formLogin(Customizer.withDefaults());
+                .csrf(csrf -> csrf.disable());
+
 
         return httpSecurity.build();
     }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+       return configuration.getAuthenticationManager();
+    }
+
+    @Bean
+    BCryptPasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+
+
 }
+
+

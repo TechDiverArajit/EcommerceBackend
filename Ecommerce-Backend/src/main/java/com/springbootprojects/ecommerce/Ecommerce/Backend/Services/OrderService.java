@@ -2,12 +2,9 @@ package com.springbootprojects.ecommerce.Ecommerce.Backend.Services;
 
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request.OrderRequest;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.OrderResponse;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.ProductResponse;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.CategoryEntity;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.CustomerEntity;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.UserEntity;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.OrderEntity;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.ProductEntity;
-import com.springbootprojects.ecommerce.Ecommerce.Backend.Repositories.CustomerRepository;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.Repositories.UserRepository;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -19,7 +16,7 @@ public class OrderService {
 
     private final OrderRepository orderRepository;
     private final ModelMapper modelMapper;
-    private final CustomerRepository customerRepository;
+    private final UserRepository customerRepository;
     public OrderResponse getOrderById(Long oId) {
         OrderEntity orderEntity = orderRepository.findById(oId).orElse(null);
         return modelMapper.map(orderEntity, OrderResponse.class);
@@ -28,7 +25,7 @@ public class OrderService {
 
     public OrderResponse createOrder(OrderRequest orderRequest) {
         OrderEntity orderEntity = modelMapper.map(orderRequest,OrderEntity.class);
-        CustomerEntity customer = customerRepository.findById(orderRequest.getCustomerId()).orElseThrow(()-> new RuntimeException());
+        UserEntity customer = customerRepository.findById(orderRequest.getCustomerId()).orElseThrow(()-> new RuntimeException());
         orderEntity.setId(null);
         orderEntity.setCustomer(customer);
         OrderEntity savedEntity = orderRepository.save(orderEntity);

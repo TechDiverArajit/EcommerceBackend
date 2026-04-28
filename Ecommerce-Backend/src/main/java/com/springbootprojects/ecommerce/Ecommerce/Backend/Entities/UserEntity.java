@@ -1,10 +1,12 @@
 package com.springbootprojects.ecommerce.Ecommerce.Backend.Entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -15,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 @Table(name = "Customer")
-public class CustomerEntity extends BaseEntity {
+public class UserEntity extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
     private String firstName;
@@ -47,10 +49,21 @@ public class CustomerEntity extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Role role;
+    @Builder.Default
+    private Role role = Role.ROLE_USER;
 
     public String fullName(){
         return firstName + " "+lastName;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
+
+    @Override
+    public String getUsername() {
+        return this.email;
     }
 
     public enum Role{

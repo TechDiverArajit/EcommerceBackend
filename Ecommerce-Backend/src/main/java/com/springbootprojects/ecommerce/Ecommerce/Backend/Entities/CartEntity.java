@@ -16,6 +16,6 @@ public class CartEntity extends BaseEntity{
 
     @OneToOne
     @JoinColumn(name = "customer_id")
-    private CustomerEntity Customer;
+    private UserEntity Customer;
     private String status;
 }
