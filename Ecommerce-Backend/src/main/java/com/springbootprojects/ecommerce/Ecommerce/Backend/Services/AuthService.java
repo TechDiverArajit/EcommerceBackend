@@ -4,6 +4,7 @@ import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request.AuthReque
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.AuthResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.UserResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Entities.UserEntity;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.Exceptions.ResourceNotFoundException;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Repositories.UserRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,9 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService {
+public class AuthService implements UserDetailsService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -55,5 +59,10 @@ public class AuthService {
         String refreshToken = jwtService.generateRefreshToken(user);
         Claims claims = jwtService.extractToken(accessToken);
         return new AuthResponse(user.getId(),accessToken,refreshToken,claims.getExpiration().getTime());
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        return userRepository.findByEmail(username).orElseThrow(()-> new ResourceNotFoundException("No username found"));
     }
 }

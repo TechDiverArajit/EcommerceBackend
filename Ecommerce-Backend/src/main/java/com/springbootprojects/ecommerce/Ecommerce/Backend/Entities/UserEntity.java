@@ -66,6 +66,11 @@ public class UserEntity extends BaseEntity implements UserDetails {
         return this.email;
     }
 
+    @Override
+    public String getPassword(){
+        return this.password;
+    }
+
     public enum Role{
         ROLE_USER,ROLE_ADMIN;
     }
