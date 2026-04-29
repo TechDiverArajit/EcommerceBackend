@@ -25,7 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
-public class AuthService implements UserDetailsService {
+public class AuthService {
 
     private final ModelMapper modelMapper;
     private final UserRepository userRepository;
@@ -34,6 +34,7 @@ public class AuthService implements UserDetailsService {
     private final AuthenticationManager authenticationManager;
 
     private final JwtService jwtService;
+
     public UserResponse register(AuthRequest.Register register) {
         Optional<UserEntity> user = userRepository.findByEmail(register.getEmail());
         if(user.isPresent()){
@@ -61,8 +62,5 @@ public class AuthService implements UserDetailsService {
         return new AuthResponse(user.getId(),accessToken,refreshToken,claims.getExpiration().getTime());
     }
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        return userRepository.findByEmail(username).orElseThrow(()-> new ResourceNotFoundException("No username found"));
-    }
+
 }

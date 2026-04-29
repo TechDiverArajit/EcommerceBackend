@@ -44,7 +44,7 @@ public class JwtService {
                 .compact();
     }
 
-    public Long getUserWithToken(String token){
+    public Long getUserIdWithToken(String token){
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()
@@ -60,6 +60,8 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
+
 
 
 

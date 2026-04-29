@@ -4,8 +4,13 @@ import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request.AuthReque
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.AuthResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.UserResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Services.AuthService;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.Services.JwtService;
+import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
@@ -17,6 +22,9 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
 
     private final AuthService authService;
+    private final JwtService jwtService;
+    @Value("${deploy.env}")
+    private final String deployEnv;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> register(@RequestBody @Valid AuthRequest.Register register){
@@ -30,11 +38,21 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> login(@RequestBody  @Valid AuthRequest.Login login ){
+    public ResponseEntity<AuthResponse> login(@RequestBody  @Valid AuthRequest.Login login , HttpServletResponse response){
         AuthResponse authResponse = authService.login(login);
+        Cookie cookie =  new Cookie("refreshToken",authResponse.getRefreshToken());
+        cookie.setHttpOnly(true);
+        cookie.setSecure("production".equals(deployEnv));
+        response.addCookie(cookie);
         return ResponseEntity.ok(authResponse);
 
     }
+
+//        @PostMapping("/refresh")
+//        public ResponseEntity<String> refresh(@RequestBody String token){
+//
+//        }
+
 
 
 

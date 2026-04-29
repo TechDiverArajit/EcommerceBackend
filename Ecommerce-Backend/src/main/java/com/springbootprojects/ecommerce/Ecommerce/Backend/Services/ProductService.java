@@ -28,7 +28,6 @@ public class ProductService {
 
     public ProductResponse createProduct(ProductRequest productRequest) {
         ProductEntity productEntity = modelMapper.map(productRequest,ProductEntity.class);
-
         CategoryEntity category = categoryRepository.findById(productRequest.getCategoryId()).orElseThrow(() -> new RuntimeException());
         productEntity.setId(null);
         productEntity.setCategory(category);
