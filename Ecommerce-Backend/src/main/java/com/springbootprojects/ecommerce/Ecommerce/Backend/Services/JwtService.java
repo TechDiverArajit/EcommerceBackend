@@ -29,7 +29,7 @@ public class JwtService {
                 .claim("roles", List.of("ADMIN","USER"))
                 .claim("type","access")
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() * 1000*60*5))
+                .expiration(new Date(System.currentTimeMillis() + 1000*60*5))
                 .signWith(getSecretKey())
                 .compact();
     }
@@ -39,12 +39,13 @@ public class JwtService {
                 .subject(user.getId().toString())
                 .claim("type","refresh")
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() * 1000*60*60*24*30))
+                .expiration(new Date(System.currentTimeMillis() + 1000L*60*60*24*30))
                 .signWith(getSecretKey())
                 .compact();
     }
 
     public Long getUserIdWithToken(String token){
+
         Claims claims = Jwts.parser()
                 .verifyWith(getSecretKey())
                 .build()

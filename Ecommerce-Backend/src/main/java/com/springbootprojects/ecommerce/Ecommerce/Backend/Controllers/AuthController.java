@@ -3,10 +3,12 @@ package com.springbootprojects.ecommerce.Ecommerce.Backend.Controllers;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Request.AuthRequest;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.AuthResponse;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.DTOs.Response.UserResponse;
+import com.springbootprojects.ecommerce.Ecommerce.Backend.Exceptions.ResourceNotFoundException;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Services.AuthService;
 import com.springbootprojects.ecommerce.Ecommerce.Backend.Services.JwtService;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -24,7 +28,7 @@ public class AuthController {
     private final AuthService authService;
     private final JwtService jwtService;
     @Value("${deploy.env}")
-    private final String deployEnv;
+    private String deployEnv;
 
     @PostMapping("/signup")
     public ResponseEntity<UserResponse> register(@RequestBody @Valid AuthRequest.Register register){
@@ -48,10 +52,16 @@ public class AuthController {
 
     }
 
-//        @PostMapping("/refresh")
-//        public ResponseEntity<String> refresh(@RequestBody String token){
-//
-//        }
+        @PostMapping("/refresh")
+        public ResponseEntity<AuthResponse> refresh(HttpServletRequest request){
+            String refreshToken = Arrays.stream(request.getCookies())
+                    .filter(cookie -> "refreshToken".equals(cookie.getName()))
+                    .findFirst()
+                    .map(cookie -> cookie.getValue())
+                    .orElseThrow(() -> new ResourceNotFoundException("Cookie not found"));
+            AuthResponse authResponse = authService.refresh(refreshToken);
+            return ResponseEntity.ok(authResponse);
+        }
 
 
 

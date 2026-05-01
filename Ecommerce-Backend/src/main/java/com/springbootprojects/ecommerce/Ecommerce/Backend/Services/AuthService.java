@@ -62,5 +62,14 @@ public class AuthService {
         return new AuthResponse(user.getId(),accessToken,refreshToken,claims.getExpiration().getTime());
     }
 
+    public AuthResponse refresh(String token){
+        Long id = jwtService.getUserIdWithToken(token);
+        UserResponse userResponse = getUserById(id);
+        UserEntity user = modelMapper.map(userResponse,UserEntity.class);
+        String accessToken = jwtService.generateRefreshToken(user);
+        Claims claims = jwtService.extractToken(token);
+        return new AuthResponse(user.getId(),accessToken,token,claims.getExpiration().getTime());
+    }
+
 
 }
